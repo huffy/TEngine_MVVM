@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 namespace Framework.Interactivity
 {
@@ -60,7 +61,7 @@ namespace Framework.Interactivity
         /// Fires the Raised event.
         /// </summary>
         /// <param name="context">The context for the interaction request.</param>
-        public async Task<T> Raise(T context)
+        public async UniTask<T> Raise(T context)
         {
             TaskCompletionSource<object> source = new TaskCompletionSource<object>();
             this.Raised?.Invoke(this.sender, new AsyncInteractionEventArgs(source, context));

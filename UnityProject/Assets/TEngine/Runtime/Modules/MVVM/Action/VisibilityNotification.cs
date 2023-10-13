@@ -3,14 +3,14 @@ namespace Framework.Interactivity
 {
     public class VisibilityNotification
     {
-        public static VisibilityNotification CreateShowNotification(bool waitDisabled = false)
+        public static VisibilityNotification CreateShowNotification()
         {
-            return new VisibilityNotification(true, null, waitDisabled);
+            return new VisibilityNotification(true, null);
         }
 
-        public static VisibilityNotification CreateShowNotification(object viewModel, bool waitDisabled = false)
+        public static VisibilityNotification CreateShowNotification(object viewModel)
         {
-            return new VisibilityNotification(true, viewModel, waitDisabled);
+            return new VisibilityNotification(true, viewModel);
         }
 
         public static VisibilityNotification CreateHideNotification()
@@ -26,15 +26,10 @@ namespace Framework.Interactivity
         {
         }
 
-        public VisibilityNotification(bool visible, object viewModel) : this(visible, viewModel, false)
-        {
-        }
-
-        public VisibilityNotification(bool visible, object viewModel, bool waitDisabled)
+        public VisibilityNotification(bool visible, object viewModel)
         {
             this.Visible = visible;
             this.ViewModel = viewModel;
-            this.WaitDisabled = waitDisabled;
         }
     }
 }
