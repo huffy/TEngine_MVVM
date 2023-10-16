@@ -6,14 +6,20 @@ using UnityEngine;
 
 namespace Framework.Tutorials
 {
-    public class ListView : UIWindow
+    public class ListView : UIWidget
     {
         private ObservableList<ListItemViewModel> items;
 
-        public Transform content;
+        private Transform content;
 
-        public GameObject itemTemplate;
-
+        #region 脚本工具生成的代码
+        private GameObject m_itemTemplate;
+        public override void ScriptGenerator()
+        {
+            m_itemTemplate = FindChild("m_itemTemplate").gameObject;
+            content = FindChild("Viewport/Content");
+        }
+        #endregion
         public ObservableList<ListItemViewModel> Items
         {
             get { return this.items; }
@@ -26,7 +32,7 @@ namespace Framework.Tutorials
                     this.items.CollectionChanged -= OnCollectionChanged;
           
                 this.items = value;
-                // this.OnItemsChanged();
+                 this.OnItemsChanged();
 
                 if (this.items != null)
                     this.items.CollectionChanged += OnCollectionChanged;
@@ -78,41 +84,37 @@ namespace Framework.Tutorials
         
         protected virtual void AddItem(int index, object item)
         {
-            var itemViewGo = Object.Instantiate(itemTemplate);
+            var itemViewGo = Object.Instantiate(m_itemTemplate);
             itemViewGo.transform.SetParent(this.content, false);
             itemViewGo.transform.SetSiblingIndex(index);
             itemViewGo.SetActive(true);
-        
-            UIBase itemView = itemViewGo.GetComponent<UIBase>();
+            ListItemView itemView = CreateWidget<ListItemView>(itemViewGo);
             itemView.transform.SetDataContext(item);
         }
         
         protected virtual void RemoveItem(int index, object item)
         {
-            Transform transform = this.content.GetChild(index);
-            UIBase itemView = transform.GetComponent<UIBase>();
-            if (itemView.transform.GetDataContext() == item)
+            Transform itemTransform = this.content.GetChild(index);
+            if (itemTransform.GetDataContext() == item)
             {
-                itemView.gameObject.SetActive(false);
-                Object.Destroy(itemView.gameObject);
+                itemTransform.gameObject.SetActive(false);
+                Object.Destroy(itemTransform.gameObject);
             }                                                                                                                                                                                                                            
         }
         
         protected virtual void ReplaceItem(int index, object oldItem, object item)
         {
-            Transform transform = this.content.GetChild(index);
-            UIBase itemView = transform.GetComponent<UIBase>();
-            if (itemView.transform.GetDataContext() == oldItem)
+            Transform itemTransform = this.content.GetChild(index);
+            if (itemTransform.GetDataContext() == oldItem)
             {
-                itemView.transform.SetDataContext(item);
+                itemTransform.SetDataContext(item);
             }
         }
         
         protected virtual void MoveItem(int oldIndex, int index, object item)
         {
-            Transform transform = this.content.GetChild(oldIndex);
-            UIBase itemView = transform.GetComponent<UIBase>();
-            itemView.transform.SetSiblingIndex(index);
+            Transform itemTransform = this.content.GetChild(oldIndex);
+            itemTransform.SetSiblingIndex(index);
         }
         
         protected virtual void ResetItem()
@@ -124,5 +126,4 @@ namespace Framework.Tutorials
             }
         }
     }
-
 }

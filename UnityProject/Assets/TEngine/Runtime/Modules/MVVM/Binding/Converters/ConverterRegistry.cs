@@ -19,6 +19,10 @@ namespace Framework.Binding.Converters
 
         private Sprite SpriteConverter(string spriteName)
         {
+            if (string.IsNullOrEmpty(spriteName))
+            {
+                return null;
+            }
             var loadAsset = GameModule.Resource.LoadAssetAsyncHandle<Sprite>(spriteName);
             loadAsset.WaitForAsyncComplete();
             return loadAsset.AssetObject as Sprite;
