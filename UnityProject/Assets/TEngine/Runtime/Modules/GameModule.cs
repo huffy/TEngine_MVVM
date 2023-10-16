@@ -9,9 +9,11 @@ namespace TEngine
     /// </summary>
     public partial class GameModule : MonoBehaviour
     {
-        private static readonly Dictionary<Type, Module> _moduleMaps = new Dictionary<Type, Module>(ModuleImpSystem.DesignModuleCount);
+        private static readonly Dictionary<Type, Module> _moduleMaps =
+            new Dictionary<Type, Module>(ModuleImpSystem.DesignModuleCount);
 
         #region 框架模块
+
         /// <summary>
         /// 获取游戏基础模块。
         /// </summary>
@@ -67,21 +69,21 @@ namespace TEngine
         public static SettingModule Setting => _setting ??= Get<SettingModule>();
 
         private static SettingModule _setting;
-        
+
         /// <summary>
         /// 获取UI模块。
         /// </summary>
         public static UIModule UI => _ui ??= Get<UIModule>();
 
         private static UIModule _ui;
-        
+
         /// <summary>
         /// 获取多语言模块。
         /// </summary>
         public static LocalizationModule Localization => _localization ??= Get<LocalizationModule>();
 
         private static LocalizationModule _localization;
-        
+
         #endregion
 
         /// <summary>

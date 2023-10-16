@@ -323,7 +323,7 @@ namespace TEngine
         /// <param name="visible">是否可见。</param>
         /// <typeparam name="T">UIWidget。</typeparam>
         /// <returns>UIWidget实例。</returns>
-        public async UniTask<T> CreateWidgetByPathAsync<T>(Transform parentTrans, string assetLocation, bool visible = true) where T : UIWidget, new()
+        public async UniTask<UIBase> CreateWidgetByPathAsync<T>(Transform parentTrans, string assetLocation, bool visible = true) where T : UIWidget, new()
         {
             GameObject goInst = await GameModule.Resource.LoadAssetAsync<GameObject>(assetLocation, gameObject.GetCancellationTokenOnDestroy());
             goInst.transform.SetParent(parentTrans);
@@ -368,7 +368,7 @@ namespace TEngine
         /// <param name="visible">是否可见。</param>
         /// <typeparam name="T">UIWidget。</typeparam>
         /// <returns>UIWidget实例。</returns>
-        public async UniTask<T> CreateWidgetByTypeAsync<T>(Transform parentTrans, bool visible = true) where T : UIWidget, new()
+        public async UniTask<UIBase> CreateWidgetByTypeAsync<T>(Transform parentTrans, bool visible = true) where T : UIWidget, new()
         {
             return await CreateWidgetByPathAsync<T>(parentTrans, typeof(T).Name, visible);
         }

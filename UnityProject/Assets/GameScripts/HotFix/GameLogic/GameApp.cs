@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using Framework.Tutorials;
 using GameBase;
 using TEngine;
 
@@ -37,7 +38,7 @@ public partial class GameApp:Singleton<GameApp>
     /// </summary>
     private void StartGameLogic()
     {
-        
+        GameModule.UI.ShowUIAsync<ListViewDatabindingExample>();
     }
 
     /// <summary>
