@@ -147,14 +147,14 @@ namespace TEngine
 
                 if (varType == "Button")
                 {
-                    string varFuncName = ScriptGenerator.GetBtnFuncName(varName);
+                    string varFuncName = GenerateScriptLogic.GetBtnFuncName(varName);
                     strOnCreate.Append($"\t\t\t{varName}.onClick.AddListener({varFuncName});\n");
                     strCallback.Append($"\t\tprivate void {varFuncName}()\n");
                     strCallback.Append("\t\t{\n\t\t}\n");
                 }
                 else if (varType == "Toggle")
                 {
-                    string varFuncName = ScriptGenerator.GetToggleFuncName(varName);
+                    string varFuncName = GenerateScriptLogic.GetToggleFuncName(varName);
                     strOnCreate.Append($"\t\t\t{varName}.onValueChanged.AddListener({varFuncName});\n");
                     strCallback.Append($"\t\tprivate void {varFuncName}(bool isOn)\n");
                     strCallback.Append("\t\t{\n\t\t}\n");

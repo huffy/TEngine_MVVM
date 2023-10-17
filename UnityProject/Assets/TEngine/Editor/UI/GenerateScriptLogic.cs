@@ -69,25 +69,6 @@ public class GenerateScriptLogic
                     strBind.Append(
                         $"\t\t\t{varName} = FindChildComponent<AnimCurveObject>(\"{varPath}\").m_animCurve;\n");
                     break;
-                case "RichItemIcon":
-                case "CommonFightWidget":
-                case "PlayerHeadWidget":
-                    strBind.Append($"\t\t\t{varName} = CreateWidgetByType<{componentName}>(\"{varPath}\");\n");
-                    break;
-                case "RedNoteBehaviour":
-                case "TextButtonItem":
-                case "SwitchTabItem":
-                case "UIActorWidget":
-                case "UIEffectWidget":
-                case "UISpineWidget":
-                    strBind.Append($"\t\t\t{varName} = CreateWidget<{componentName}>(\"{varPath}\");\n");
-                    break;
-                case "ActorNameBinderText":
-                    strBind.Append($"\t\t\t{varName} = FindTextBinder(\"{varPath}\");\n");
-                    break;
-                case "ActorNameBinderEffect":
-                    strBind.Append($"\t\t\t{varName} = FindEffectBinder(\"{varPath}\");\n");
-                    break;
                 default:
                     strBind.Append($"\t\t\t{varName} = FindChildComponent<{componentName}>(\"{varPath}\");\n");
                     break;
@@ -98,12 +79,14 @@ public class GenerateScriptLogic
                 string varFuncName = GetBtnFuncName(varName);
                 if (isUniTask)
                 {
+                    strCallback.Append("\n");
                     strOnCreate.Append($"\t\t\t{varName}.onClick.AddListener(UniTask.UnityAction({varFuncName}));\n");
                     strCallback.Append($"\t\tprivate async UniTaskVoid {varFuncName}()\n");
                     strCallback.Append("\t\t{\n await UniTask.Yield();\n\t\t}\n");
                 }
                 else
                 {
+                    strCallback.Append("\n");
                     strOnCreate.Append($"\t\t\t{varName}.onClick.AddListener({varFuncName});\n");
                     strCallback.Append($"\t\tprivate void {varFuncName}()\n");
                     strCallback.Append("\t\t{\n\t\t}\n");
@@ -112,6 +95,7 @@ public class GenerateScriptLogic
             else if (componentName == "Toggle")
             {
                 string varFuncName = GetToggleFuncName(varName);
+                strCallback.Append("\n");
                 strOnCreate.Append($"\t\t\t{varName}.onValueChanged.AddListener({varFuncName});\n");
                 strCallback.Append($"\t\tprivate void {varFuncName}(bool isOn)\n");
                 strCallback.Append("\t\t{\n\t\t}\n");
@@ -119,6 +103,7 @@ public class GenerateScriptLogic
             else if (componentName == "Slider")
             {
                 string varFuncName = GetSliderFuncName(varName);
+                strCallback.Append("\n");
                 strOnCreate.Append($"\t\t\t{varName}.onValueChanged.AddListener({varFuncName});\n");
                 strCallback.Append($"\t\tprivate void {varFuncName}(float value)\n");
                 strCallback.Append("\t\t{\n\t\t}\n");

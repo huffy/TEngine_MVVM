@@ -9,17 +9,17 @@ namespace TEngine.Editor.UI
         {
             PrefabErgodic.Generate(false);
         }
+        
+        [MenuItem("GameObject/ScriptGenerator/UIPropertyAndListener", priority = 42)]
+        public static void MemberPropertyAndListener()
+        {
+            PrefabErgodic.Generate(true);
+        }
 
         [MenuItem("GameObject/ScriptGenerator/UIProperty - UniTask", priority = 43)]
         public static void MemberPropertyUniTask()
         {
             PrefabErgodic.Generate(false, true);
-        }
-
-        [MenuItem("GameObject/ScriptGenerator/UIPropertyAndListener", priority = 42)]
-        public static void MemberPropertyAndListener()
-        {
-            PrefabErgodic.Generate(true);
         }
 
         [MenuItem("GameObject/ScriptGenerator/UIPropertyAndListener - UniTask", priority = 44)]
