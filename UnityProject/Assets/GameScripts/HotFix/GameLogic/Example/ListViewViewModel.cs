@@ -1,47 +1,57 @@
-﻿using Framework.Commands;
+using Framework.Commands;
 using Framework.Interactivity;
 using Framework.Observables;
 using Framework.ViewModels;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace Framework.Tutorials
+namespace GameLogic
 {
-    public class ListViewViewModel : ViewModelBase
-    {
-        private ListItemViewModel selectedItem;
-        private SimpleCommand<ListItemViewModel> itemSelectCommand;
-        private SimpleCommand<ListItemViewModel> itemClickCommand;
-        private SimpleCommand<ListItemEditModel> itemEditedCommand;
-        private AsyncInteractionRequest<VisibilityNotification> itemEditRequest;
-        private ObservableList<ListItemViewModel> items;
+	public class ListViewViewModel : ViewModelBase
+	{
+		#region 脚本工具生成的代码
+		private ListViewModel _model;
+        public TemplateViewModel M_TemplateViewModel;
+        private TemplateViewModel _clickedTemplateViewModel;
+        #endregion
+
+		#region 事件
+		#endregion
+
+        private SimpleCommand<TemplateViewModel> itemSelectCommand;
+        private ICommand _itemClickCommand, _selectItemCommand;
+        private ObservableList<TemplateViewModel> items;
+        private IInteractionAction _interactionAction;
 
         public ListViewViewModel()
         {
-            itemEditRequest = new AsyncInteractionRequest<VisibilityNotification>(this);
-            itemClickCommand = new SimpleCommand<ListItemViewModel>(OnItemClick);
-            itemSelectCommand = new SimpleCommand<ListItemViewModel>(OnItemSelect);
-            itemEditedCommand = new SimpleCommand<ListItemEditModel>(OnItemEdited);
+            _model = new ListViewModel();
+            itemSelectCommand = new SimpleCommand<TemplateViewModel>(OnItemSelect);
+        }
+        
+        public void Initialize(ICommand clickCommand, ICommand selectCommand)
+        {
+            _itemClickCommand = clickCommand;
+            _selectItemCommand = selectCommand;
             items = CreateList();
         }
 
-        public ObservableList<ListItemViewModel> Items
+        public ObservableList<TemplateViewModel> Items
         {
             get { return this.items; }
             set { this.Set(ref items, value); }
         }
 
-        public ListItemViewModel SelectedItem
+        public TemplateViewModel SelectedItem
         {
-            get { return this.selectedItem; }
-            set { Set(ref selectedItem, value); }
+            get { return this.M_TemplateViewModel; }
+            set
+            {
+                Set(ref M_TemplateViewModel, value);
+                _selectItemCommand.Execute(value);
+            }
         }
 
-        public IInteractionRequest ItemEditRequest
-        {
-            get { return this.itemEditRequest; }
-        }
-
-        public ListItemViewModel SelectItem(int index)
+        public TemplateViewModel SelectItem(int index)
         {
             if (index < 0 || index >= items.Count)
                 throw new System.Exception();
@@ -63,18 +73,7 @@ namespace Framework.Tutorials
             return item;
         }
 
-        private async void OnItemClick(ListItemViewModel item)
-        {
-            ListItemEditModel editModel = new ListItemEditModel()
-            {
-                Icon = item.Icon, Price = item.Price, Title = item.Title,
-                ItemViewModel = item
-            };
-            ListItemEditViewModel editViewModel = new ListItemEditViewModel(editModel, itemEditedCommand);
-            await itemEditRequest.Raise(VisibilityNotification.CreateShowNotification(editViewModel));
-        }
-
-        private void OnItemSelect(ListItemViewModel item)
+        private void OnItemSelect(TemplateViewModel item)
         {
             item.IsSelected = !item.IsSelected;
             if (items != null && item.IsSelected)
@@ -89,14 +88,6 @@ namespace Framework.Tutorials
 
             if (item.IsSelected)
                 this.SelectedItem = item;
-        }
-
-        private void OnItemEdited(ListItemEditModel model)
-        {
-            ListItemViewModel item = model.ItemViewModel;
-            item.Icon = model.Icon;
-            item.Price = model.Price;
-            item.Title = model.Title;
         }
 
         public void AddItem()
@@ -145,9 +136,9 @@ namespace Framework.Tutorials
             this.Items = CreateList();
         }
 
-        private ObservableList<ListItemViewModel> CreateList()
+        private ObservableList<TemplateViewModel> CreateList()
         {
-            var items = new ObservableList<ListItemViewModel>();
+            var items = new ObservableList<TemplateViewModel>();
             for (int i = 0; i < 3; i++)
             {
                 items.Add(NewItem(i));
@@ -155,11 +146,12 @@ namespace Framework.Tutorials
             return items;
         }
 
-        private ListItemViewModel NewItem(int id)
+        private TemplateViewModel NewItem(int id)
         {
             int iconIndex = Random.Range(1, 30);
             float price = Random.Range(0f, 100f);
-            return new ListItemViewModel(this.itemSelectCommand, this.itemClickCommand) { Title = "Equip " + id, Icon = string.Format("EquipImages_{0}", iconIndex), Price = price };
+            return new TemplateViewModel(this.itemSelectCommand, _itemClickCommand) { Title = "Equip " + id, Icon = string.Format("EquipImages_{0}", iconIndex), Price = price.ToString() };
         }
-    }
+
+	}
 }

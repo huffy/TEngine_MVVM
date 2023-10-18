@@ -1,26 +1,46 @@
-﻿using Framework.Observables;
 using System.Collections.Specialized;
-using Framework.Binding;
-using TEngine;
 using UnityEngine;
+using TEngine;
+using Framework.Binding;
+using Framework.Observables;
 
-namespace Framework.Tutorials
+namespace GameLogic
 {
-    public class ListView : UIWidget
-    {
-        private ObservableList<ListItemViewModel> items;
+	public class ListView : UIWidget
+	{
+		private ObservableList<TemplateViewModel> items;
 
-        private Transform content;
+		private Transform content;
 
-        #region 脚本工具生成的代码
-        private GameObject m_itemTemplate;
-        public override void ScriptGenerator()
+		#region 脚本工具生成的代码
+
+		public ListViewViewModel ViewModel
         {
-            m_itemTemplate = FindChild("m_itemTemplate").gameObject;
-            content = FindChild("Viewport/Content");
+            get
+            {
+                return (ListViewViewModel) transform.GetDataContext();
+            }
+            set => transform.SetDataContext(value);
         }
-        #endregion
-        public ObservableList<ListItemViewModel> Items
+
+        private GameObject m_itemTemplateGo;
+		private Template m_itemTemplate;
+
+		public override void ScriptGenerator()
+		{
+			base.ScriptGenerator();
+            var bindingSet = this.CreateBindingSet<ListView, ListViewViewModel>();
+			m_itemTemplateGo = FindChild("m_itemTemplate").gameObject;
+			m_itemTemplate = CreateWidget<Template>(m_itemTemplateGo);
+			content = FindChild("Viewport/Content");
+			bindingSet.Bind(m_itemTemplate).For(v => v.ViewModel).To(vm => vm.M_TemplateViewModel);
+            bindingSet.Bind(this).For(v => v.Items).To(vm => vm.Items).TwoWay();
+			bindingSet.Build();
+		}
+
+		#endregion
+		
+		 public ObservableList<TemplateViewModel> Items
         {
             get { return this.items; }
             set
@@ -84,11 +104,11 @@ namespace Framework.Tutorials
         
         protected virtual void AddItem(int index, object item)
         {
-            var itemViewGo = Object.Instantiate(m_itemTemplate);
+            var itemViewGo = Object.Instantiate(m_itemTemplate.gameObject);
             itemViewGo.transform.SetParent(this.content, false);
             itemViewGo.transform.SetSiblingIndex(index);
             itemViewGo.SetActive(true);
-            ListItemView itemView = CreateWidget<ListItemView>(itemViewGo);
+            Template itemView = CreateWidget<Template>(itemViewGo);
             itemView.transform.SetDataContext(item);
         }
         

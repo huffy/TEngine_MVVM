@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
-using Framework.Tutorials;
 using GameBase;
+using GameLogic;
 using TEngine;
 
 /// <summary>
