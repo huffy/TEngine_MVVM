@@ -40,7 +40,6 @@ public class PrefabErgodic
             }
 
             // 脚本工具生成的代码
-            strFile.Append("\t\t#region 脚本工具生成的代码\n");
             strFile.Append($"\t\tprivate {root.name}ViewModel _viewModel;\n");
             strFile.Append(strVar);
             strFile.Append("\t\tpublic override void ScriptGenerator()\n");
@@ -54,7 +53,6 @@ public class PrefabErgodic
             strFile.Append(strOnCreate);
             strFile.Append("\t\t\tbindingSet.Build();\n");
             strFile.Append("\t\t}\n");
-            strFile.Append("\t\t#endregion");
 
             if (includeListener)
             {
@@ -104,10 +102,9 @@ public class PrefabErgodic
             strFile.Append("\t{\n");
 
             // 脚本工具生成的代码
-            strFile.Append("\t\t#region 脚本工具生成的代码\n");
             strFile.Append("\t\tpublic " + widgetName + "ViewModel ViewModel\n");
             strFile.Append("\t\t{\n");
-            strFile.Append("\t\t\tget => (" + widgetName + "ViewModel)transform.GetDataContext(); \n");
+            strFile.Append("\t\t\tget => (" + widgetName + "ViewModel)transform.GetDataContext();\n");
             strFile.Append("\t\t\tset => transform.SetDataContext(value); \n");
             strFile.Append("\t\t}\n");
             strFile.Append(strVar);
@@ -119,11 +116,10 @@ public class PrefabErgodic
             strFile.Append(strOnCreate);
             strFile.Append("\t\t\tbindingSet.Build();\n");
             strFile.Append("\t\t}\n");
-            strFile.Append("\t\t#endregion");
 
             strFile.Append("\n\n");
-            strFile.Append("}\n");
             strFile.Append("\t}\n");
+            strFile.Append("}\n");
             SaveScript(widgetName, strFile.ToString());
             return widgetName;
         }
@@ -149,20 +145,16 @@ public class PrefabErgodic
              strFile.Append("\t{\n");
 
              // 脚本工具生成的代码
-             strFile.Append("\t\t#region 脚本工具生成的代码\n");
              strFile.Append($"\t\tprivate {widgetName}Model _model;\n");
              strFile.Append(strVar);
              strFile.Append($"\t\tpublic {widgetName}ViewModel ()\n");
              strFile.Append("\t\t{\n"); 
              strFile.Append($"\t\t\t_model = new {widgetName}Model();\n");
              strFile.Append("\t\t}\n");
-             strFile.Append("\t\t#endregion");
 
              strFile.Append("\n\n");
-             // #region 事件
-             strFile.Append("\t\t#region 事件\n");
+
              strFile.Append(strCallback);
-             strFile.Append("\t\t#endregion\n\n");
              strFile.Append("\t}\n");
              strFile.Append("}\n");
              SaveScript(widgetName + "ViewModel", strFile.ToString());
@@ -186,12 +178,8 @@ public class PrefabErgodic
              strFile.Append("{\n");
              strFile.Append("\tpublic class " + widgetName + "Model\n");
              strFile.Append("\t{\n");
-
-             // 脚本工具生成的代码
-             strFile.Append("\t\t#region 脚本工具生成的代码\n");
+             
              strFile.Append(strVar);
-
-             strFile.Append("\t\t#endregion");
 
              strFile.Append("\n\n");
 
@@ -234,7 +222,7 @@ public class PrefabErgodic
              if (child.name.StartsWith("m_item"))
              {
                  string componentName = GenerateViewModel(child);
-                 string varName = "M_" + componentName;
+                 string varName = componentName;
                  GenerateModel(child);
                  strVar.Append("\t\tpublic " + componentName + " " + varName + ";\n");
                  continue;

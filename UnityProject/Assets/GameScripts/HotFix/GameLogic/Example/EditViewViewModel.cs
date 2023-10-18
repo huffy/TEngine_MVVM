@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using Framework.Commands;
 using Framework.ViewModels;
 using UnityEngine;
